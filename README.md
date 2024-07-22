@@ -1,66 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<img alt="Evalua logo" src="public/logo_e.png"/>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 
-## About Laravel
+# Prueba Mid Back-end
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Instrucciones sobre la realización de la prueba
+Para realizar esta prueba lo primero que debes hacer es descargarte el repositorio. Una vez descargado, debes realizar todas las modificaciones. Se ha creado un endpoint de prueba **/api/helloworld** para tener unas pautas. Más información en el fichero **routes/api.php**
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## PREGUNTA 1
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+El repositorio tiene un proyecto Laravel prácticamente limpio. Las únicas modificaciones que se han realizado son las siguientes:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Se ha creado las migraciones necesarias para realizar la prueba.
+- Se ha configurado el fichero phpunit.xml para que pueda ejecutar las pruebas sobre una conexión de SQLite. Puede modificar este fichero si prefiere ejecutar las pruebas sobre una conexión mysql, por ejemplo.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Aunque el repositorio tenga un proyecto Laravel, hay libertad absoluta para realizar la prueba en cualquier framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Imagina que tenemos la siguiente base de datos:
 
-## Laravel Sponsors
+budgets
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- id - primary key, int autoincrement
+- total_amount - decimal 10,2
+- created_at - timestamp
+- update_at - timestamp
+- deleted_at - timestamp
 
-### Premium Partners
+budget_lines
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+- id - primary key, int autoincrement
+- budget_id - FK a la tabla *budgets*
+- total_amount - decimal 10,2
+- net_amount - decimal 10,2
+- vat_amount - decimal 10,2
+- vat - decimal 10,2
+- created_at - timestamp
+- update_at - timestamp
+- deleted_at - timestamp
 
-## Contributing
+y nos piden realizar las siguientes tareas para que la API sea capaz de obtener y crear un presupuesto.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## TAREA T1
 
-## Code of Conduct
+La API tiene que ser capaz de recibir una petición POST api/budgets y ser capaz de crear un presupuesto. La petición será de este tipo:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Array de budgetLine
 
-## Security Vulnerabilities
+Cada budgetLine a su vez recibirá estos datos:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- net_amount (decimal, requerido)
+- vat (decimal, requerido)
 
-## License
+```
+[
+	{
+		"net_amount": 100,
+		"vat": 21.00,
+	},
+	...
+]
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Validación
+Validar que los datos recibidos y que el valor del campo vat esté entre 0 - 100, si no pasa la validación se devolverá un mensaje de error.
+
+### Creación y calculo del presupuesto
+El importe del IVA (vat_amount) se calcula: (net_amount * vat) / 100.
+
+La cantidad total de una línea de presupuesto se calcula a partir de la suma de la cantidad neta (net_amount) y el importe del IVA (vat_amount).
+
+La cantidad total de un presupuesto será la suma de las cantidades totales de todas las líneas del presupuesto.
+
+Guardar las lineas de presupuesto y crear el presuesto con los datos rellenos.
+
+**Se debe crear todos los Unit, Feature tests necesarios para testear la funcionalidad**
+
+## TAREA T2
+
+La API tiene que ser capaz de obtener los presupuestos cuya cantidad total sea mayor a 50 al recibir una petición de este tipo:
+
+GET api/budgets?totalAmount=50
+
+El resultado a devolver por parte de la API debe ser el siguiente:
+
+Array de budgets:
+- id
+- total_amount
+- Array de budgetLines
+- created_at
+- updated_at
+
+A su vez, cada budgetLine mostrará:
+
+- id
+- vat
+- net_mount
+- vat_amount
+- total_amount
+- created_at
+- updated_at
+
+**Para esta tarea SÓLO se debe crear Feature tests necesarios para testear la funcionalidad**
+
+
+## IMPORTANTE
+
+
+```
+El objetivo principal de la prueba no es completarla,
+evaluaremos sobre todo la calidad y la estructura del código desarrollado.
+```
