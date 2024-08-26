@@ -54,7 +54,7 @@ Cada budgetLine a su vez recibirá estos datos:
 ```
 [
 	{
-		"net_amount": 100,
+		"net_amount": 100.00,
 		"vat": 21.00,
 	},
 	...
@@ -64,7 +64,7 @@ Cada budgetLine a su vez recibirá estos datos:
 ### Validación
 Validar que los datos recibidos y que el valor del campo vat esté entre 0 - 100, si no pasa la validación se devolverá un mensaje de error.
 
-### Creación y calculo del presupuesto
+### Creación y cálculo del presupuesto
 El importe del IVA (vat_amount) se calcula: (net_amount * vat) / 100.
 
 La cantidad total de una línea de presupuesto se calcula a partir de la suma de la cantidad neta (net_amount) y el importe del IVA (vat_amount).
