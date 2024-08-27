@@ -8,7 +8,6 @@ Para realizar esta prueba lo primero que debes hacer es descargarte el repositor
 
 ## PREGUNTA 1
 
-
 El repositorio tiene un proyecto Laravel prácticamente limpio. Las únicas modificaciones que se han realizado son las siguientes:
 
 - Se ha creado las migraciones necesarias para realizar la prueba.
@@ -57,6 +56,10 @@ Cada budgetLine a su vez recibirá estos datos:
 		"net_amount": 100.00,
 		"vat": 21.00,
 	},
+	{
+		"net_amount": 231.50,
+		"vat": 21.00,
+	},
 	...
 ]
 ```
@@ -71,40 +74,11 @@ La cantidad total de una línea de presupuesto se calcula a partir de la suma de
 
 La cantidad total de un presupuesto será la suma de las cantidades totales de todas las líneas del presupuesto.
 
-Guardar las lineas de presupuesto y crear el presuesto con los datos rellenos.
+Guardar las lineas de presupuesto y crear el presupuesto con los datos rellenos.
 
 **Se debe crear todos los Unit, Feature tests necesarios para testear la funcionalidad**
 
-## TAREA T2
-
-La API tiene que ser capaz de obtener los presupuestos cuya cantidad total sea mayor a 50 al recibir una petición de este tipo:
-
-GET api/budgets?totalAmount=50
-
-El resultado a devolver por parte de la API debe ser el siguiente:
-
-Array de budgets:
-- id
-- total_amount
-- Array de budgetLines
-- created_at
-- updated_at
-
-A su vez, cada budgetLine mostrará:
-
-- id
-- vat
-- net_mount
-- vat_amount
-- total_amount
-- created_at
-- updated_at
-
-**Para esta tarea SÓLO se debe crear Feature tests necesarios para testear la funcionalidad**
-
-
 ## IMPORTANTE
-
 
 ```
 El objetivo principal de la prueba no es completarla,
